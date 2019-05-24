@@ -1,0 +1,5 @@
+'References
+
+ https://www.datacamp.com/community/tutorials/k-means-clustering-r
+
+'
