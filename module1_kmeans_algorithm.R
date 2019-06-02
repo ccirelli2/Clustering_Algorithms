@@ -54,7 +54,7 @@ get.euclid.dist <- function(df.d, df.c){
     
     # Rename Col w/ Centroid Number (i+2 because we start w/ two cols x & y)
     colnames(df.d)[i+2] <- c.n
-    print(head(df.d))
+ 
   }
   # Return Data frame
   return(df.d)
@@ -113,7 +113,8 @@ c.assignments <- function(df.d){
   # Run For Loop Over Every Row in Data Frame
   for (i in seq(1, length(df.d[, 1]))){
     # Isolate col/vector w/ distance measure to each centroid
-    e.dist.vector <- df.d[1, 3: num.cols] 
+    e.dist.vector <- df.d[i, 3: num.cols]
+    print(e.dist.vector)
     # Get the Min Distance (essentially the min value of this vector)
     min.e.dist <- min(e.dist.vector)
     # Generate Bolean Values based on which col == min value
