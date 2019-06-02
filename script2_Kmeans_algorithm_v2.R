@@ -13,20 +13,47 @@ source('module1_kmeans_algorithm.R')
 set.seed(7)
 p.x = runif(100, min = 0, max = 10)
 p.y = runif(100, min = 0, max = 10)
-plot(p.x, p.y)
 
 # Create DataFrame with X & Y Values
-df.pxy = data.frame(p.x, p.y)
-plot(df.pxy)
-head(df.pxy)
+df.d = data.frame(p.x, p.y)
 
 # Generate Data Points For K Centroids
-c.1 <- f.centroids(4)
+df.c <- f.centroids(4)
+
+# Initial Scatter Plot w/ Centroids
+p.1 <- ggplot(df.d, aes(x = p.x, y = p.y)) + geom_point() + 
+  geom_point(data=df.c, aes(x=df.c$x, y=df.c$y), colour='red', size=5) + 
+  ggtitle('Initial Plot - Data Cloud + Centroids')
+p.1
 
 # Calculate Euclidean Distance 2 Each Centroid
-df.pxy.c.dist <- get.euclid.dist(df.pxy, c.1)
+df.d.c.dist <- get.euclid.dist(df.d, df.c)
 
 # Create Assignments Based on Distance to Nearest Centroid
+'Steps:
+  1.) Iterate each row
+  2.) Determine which dist is the min
+  3.) Add a single col with the name of the centroid that represnts the min dist
+  4.) Return data frame with new col w/ centroid name
+'
+
+
+df.c.assignments <- c.assignments(df.d.c.dist)
+head(df.c)
+
+
+'So now we have a way of identifying which col has the min euclidean dist
+ We can also use this to assign a value to each row (add name to a vector, then convert that vector to a col in the df)
+ 
+ After we have the assignment for each row, we need to subset the data for the plot. 
+ 
+ After we plot the data cloud plus cluster assignments we need to recalculate the x,y coordinates for each cluster. 
+ This value is the mean of the x and y coordinates for each cluster assignment. 
+ Once recalculated, we use these new cluster values as the input for the second iteration of our algorithm. 
+ 
+ This process repeats until we hit a threshold or max count of iterations.
+ 
+ '
 
 
 
