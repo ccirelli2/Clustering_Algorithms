@@ -9,16 +9,17 @@ f.centroids <- function(num){
   # Set Seed
   set.seed(7)
   # Create Vectors to Capture X & Y Values
-  x <- c()
-  y <- c()
+  c.x <- c()
+  c.y <- c()
   
   # For Loop - Generate N-Centroids
   for (i in seq(1, num)){
-    x <- c(x, runif(1, min = 0, max = 10))
-    y <- c(y, runif(1, min = 0, max = 10))
+    c.x <- c(c.x, runif(1, min = 0, max = 10))
+    c.y <- c(c.y, runif(1, min = 0, max = 10))
   }
   # Create Dataframe
-  df <- data.frame(x,y)
+  centroid <- c('c.1', 'c.2', 'c.3', 'c.4')
+  df <- data.frame(c.x,c.y, centroid)
   return(df)
 }
 
@@ -36,7 +37,7 @@ get.euclid.dist <- function(df.d, df.c){
                 that can be added to our data frame, w/ name c.# and the number of the centroid. 
   '
   # For Loop (Iters = num centroids)
-  for (i in seq(1,length(df.c$x))){
+  for (i in seq(1,length(df.c$c.x))){
     
     # Count Object - Convert to character 
     c.count <- as.character(i)
@@ -48,7 +49,7 @@ get.euclid.dist <- function(df.d, df.c){
                 - df.c$x[i]:  returns only the x values for centroid = i in our sequence. 
                 Output:       should output a single column with the euclidean dist for our data 
                               vs centroid i in our seq. '
-    df.d$c.n <- sqrt((df.d$p.x - df.c$x[i])^2 + (df.d$p.y - df.c$y[i])^2)
+    df.d$c.n <- sqrt((df.d$p.x - df.c$c.x[i])^2 + (df.d$p.y - df.c$c.y[i])^2)
     
     # Something is wrong with the assignment of the values.  The same value is being assigned to every row
     
@@ -114,7 +115,7 @@ c.assignments <- function(df.d){
   for (i in seq(1, length(df.d[, 1]))){
     # Isolate col/vector w/ distance measure to each centroid
     e.dist.vector <- df.d[i, 3: num.cols]
-    print(e.dist.vector)
+  
     # Get the Min Distance (essentially the min value of this vector)
     min.e.dist <- min(e.dist.vector)
     # Generate Bolean Values based on which col == min value
@@ -130,6 +131,37 @@ c.assignments <- function(df.d){
   # Return our data frame
   return(df.d)
 }
+
+
+
+# Plot Function
+'Purpose:  The purpose of this function is to plot, at each iteration of the algorithm, the centroids and 
+           assignments based on the min euclidean distance. '
+
+
+plot.c.assignments <- function(df.c.assignments, df.c){
+  'Inputs:      df.c.assignments - dataframe that includes our data cloud plus assignments
+                df.c             - original coordinates for centroids.  
+   Output:      tbd.  Plot
+  '
+  # Limit data frame to x/y points and centroid assignments
+  df.xy.c <- select(df.c.assignments, p.x, p.y, centroid.min.dist) 
+  
+  # Generate Plots
+  p <- ggplot(data=df.xy.c, aes(x=p.x, y=p.y, colour=centroid.min.dist, size=2)) + 
+    geom_point(aes(shape=centroid.min.dist)) +
+    geom_point(data=df.c, aes(x=c.x, y=c.y, colour=centroid, size=3)) +
+    ggtitle(paste('Kmeans Plot Iteration =>', 1))
+  
+  # Generate Plot
+  p
+}
+
+
+
+
+
+
 
 
 

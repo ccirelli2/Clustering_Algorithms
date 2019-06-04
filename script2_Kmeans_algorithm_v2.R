@@ -23,12 +23,13 @@ df.c <- f.centroids(4)
 
 # Initial Scatter Plot w/ Centroids
 p.1 <- ggplot(df.d, aes(x = p.x, y = p.y)) + geom_point() + 
-  geom_point(data=df.c, aes(x=df.c$x, y=df.c$y), colour='red', size=5) + 
+  geom_point(data=df.c, aes(x=df.c$c.x, y=df.c$c.y), colour='red', size=5) + 
   ggtitle('Initial Plot - Data Cloud + Centroids')
-
+p.1
 
 # Calculate Euclidean Distance 2 Each Centroid
 df.d.c.dist <- get.euclid.dist(df.d, df.c)
+
 
 # Create Assignments Based on Distance to Nearest Centroid
 'Steps:
@@ -39,31 +40,11 @@ df.d.c.dist <- get.euclid.dist(df.d, df.c)
 '
 df.c.assignments <- c.assignments(df.d.c.dist)
 
-# Plot Function
-plot.c.assignments <- function(df.c.assignments, df.c){
-  'Inputs:      df.c.assignments - dataframe that includes our data cloud plus assignments
-                df.c             - original coordinates for centroids.  
-   Output:      tbd.  Plot
-  '
-  # Step1:  Determine how many centroid groups we have
-  names.c <- as.vector(unique(df.c.assignments$centroid.min.dist))
-  # Step2:  Limit dataframe to only x,y values & centroid assignments (dplyr has select f)
-  df.xy.c <- select(df.c.assignments, p.x, p.y, centroid.min.dist) 
-  # Step3:  Isolate x,y values for centroids
-  df.c    <- select(df.c.assignments, names.c)
-  # Generate Plots
-  p <- ggplot(df.xy.c, aes(x = p.x, y = p.y, color = centroid.min.dist)) + geom_point()
-  
-  # Generate Plot
-  p
-}
 
 
 plot.c.assignments(df.c.assignments, df.c)
 
-
-
-
+# Step2:  Limit dataframe to x,y values & centroid assignments (dplyr has select f)
 
 
 'So now we have a way of identifying which col has the min euclidean dist
