@@ -1,6 +1,8 @@
 # KMEANS CLUSTER MODULE
 
-# Function - Generate Centroid Datapoints
+
+
+# FUNCTION -  RANDOMLY GENERATE K CENTROID DATA POINTS------------------------------------------
 'input:        number of centroids to create
  output:       Data frame that includes the x/y points for the data cloud +
                data points for each centroid + 
@@ -24,7 +26,7 @@ f.centroids <- function(num){
 }
 
 
-# Iterate Centroids X & Y Columns - Calculate Dist 4 Each - Add to DF
+# ITERATE CENTROIDS X & Y COLUMNS - CALCULATE DISTANCE TO EACH CENTROID----------------------------
 
 get.euclid.dist <- function(df.d, df.c){
   'Inputs:      df.c = data frame containing centroids. 
@@ -62,7 +64,7 @@ get.euclid.dist <- function(df.d, df.c){
 }
 
 
-# Get Col Name Function 
+# GET COLUMN NAME----------------------------------------------------------------------
 'This function is an input to the c.assignments function. 
  All we do is iterate the vector and find which one is true. 
  Then we return c. + the count value, the latter of which coincides with our col names. 
@@ -87,7 +89,7 @@ get.col.name <- function(min.value.matrix){
 }
 
 
-# Centroid Assignment
+# CENTROID ASSIGNMENTS -----------------------------------------------------------------------
 
 'Purpose:    The purpose of this function is to create a column within our existing data
              data frame w/ the assignment of the centroid whose distance is shortest to 
@@ -115,7 +117,6 @@ c.assignments <- function(df.d){
   for (i in seq(1, length(df.d[, 1]))){
     # Isolate col/vector w/ distance measure to each centroid
     e.dist.vector <- df.d[i, 3: num.cols]
-  
     # Get the Min Distance (essentially the min value of this vector)
     min.e.dist <- min(e.dist.vector)
     # Generate Bolean Values based on which col == min value
@@ -134,12 +135,11 @@ c.assignments <- function(df.d){
 
 
 
-# Plot Function
+# PLOT FUNCTION------------------------------------------------------------------------
 'Purpose:  The purpose of this function is to plot, at each iteration of the algorithm, the centroids and 
            assignments based on the min euclidean distance. '
 
-
-plot.c.assignments <- function(df.c.assignments, df.c){
+plot.c.assignments <- function(df.c.assignments, df.c, n.iteration){
   'Inputs:      df.c.assignments - dataframe that includes our data cloud plus assignments
                 df.c             - original coordinates for centroids.  
    Output:      tbd.  Plot
@@ -148,21 +148,78 @@ plot.c.assignments <- function(df.c.assignments, df.c){
   df.xy.c <- select(df.c.assignments, p.x, p.y, centroid.min.dist) 
   
   # Generate Plots
-  p <- ggplot(data=df.xy.c, aes(x=p.x, y=p.y, colour=centroid.min.dist, size=2)) + 
+  p <- ggplot(data=df.xy.c, aes(x=p.x, y=p.y, colour=centroid.min.dist)) + 
     geom_point(aes(shape=centroid.min.dist)) +
     geom_point(data=df.c, aes(x=c.x, y=c.y, colour=centroid, size=3)) +
-    ggtitle(paste('Kmeans Plot Iteration =>', 1))
+    ggtitle(paste('Kmeans Plot Iteration =>', n.iteration))
   
   # Generate Plot
-  p
+  print(p)
+}
+
+
+# RECALCULATE CENTROIDS-----------------------------------------------------------------
+'Calculation:  Take each group of datapoints for each centroid.  
+               Calculate the mean x,y for each group. 
+               Use these valueas as the new centroids
+               Calculate the distance of all of the datapoints to the new centroids
+               Redue assignments
+'
+re.calc.centroids <- function(df.c.assignments){
+  centroid.list <- unique(df.c.assignments$centroid.min.dist)
+  centroid      <- c()
+  c.x           <- c()
+  c.y           <- c()
+  
+  # Iterate Over Length of Num Centroids
+  for (i in seq(1, length(centroid.list))){
+    # Obtain ith Centroid From Centroid List
+    i.centroid  <- centroid.list[i]
+    # Find Rows where assignment centroid
+    subset.i    <- df.c.assignments$centroid.min.dist == i.centroid
+    # Subset Data Frame Where Assignment == centroid.i
+    df.sub      <- df.c.assignments[subset.i,]
+    # Calculate Mean X, Y Coordinates / Assign to Vectors
+    c.x         <- c(c.x, mean(df.sub$p.x))
+    c.y         <- c(c.y, mean(df.sub$p.y))
+    centroid    <- c(centroid, i.centroid)
+  }
+  # Create New df.c (data frame containing centroid coordinates)
+  df.c        <- data.frame(c.x, c.y, centroid)
+  # Return New df.c Data Frame
+  return(df.c)
 }
 
 
 
+# CALCULATE SUM OF WITHIN & BETWEEN CLUSTER MSE----------------------------------------------------
+'1.) Sum the MSE within each cluster
+ 2.) Sum the MSE for each cluster.'
 
-
-
-
-
+calc.mse <- function(df.c.assignments){
+  centroid.list <- sort(unique(df.c.assignments$centroid.min.dist))
+  inner.mse     <- c()
+  
+  # Iterate Over Length of Num Centroids
+  for (i in seq(1, length(centroid.list))){
+    # Obtain ith Centroid From Centroid List
+    i.centroid  <- centroid.list[i]
+    # Find Rows where assignment centroid
+    subset.i    <- df.c.assignments$centroid.min.dist == i.centroid
+    # Subset Data Frame Where Assignment == centroid.i
+    df.sub      <- df.c.assignments[subset.i,]
+    # Calculate MSE Mean X, Y Coordinates / Assign to Vectors
+    'Lets try to use the num of iteration to identify the correct column. 
+     Since we now have a sorted list of centroids we know that col 3 will always
+     be c.1 and after that c.1 + n'
+    inner.mse <- c(inner.mse, sum(df.sub[ , 2 + i]))
+    }
+  
+  # Calculate Total MSE
+  outer.mse <- sum(inner.mse)
+  # Return Outer MSE
+  return(outer.mse)
+  
+}
 
 
