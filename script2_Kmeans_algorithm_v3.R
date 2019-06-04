@@ -53,10 +53,9 @@ k.means <- function(num.data.points, num.centroids, num.iters){
 }
 
 
-
-k.means(num.data.points = 200, 
+k.means(num.data.points = 300, 
         num.centroids   = 4, 
-        num.iters       = 10)
+        num.iters       = 6)
 
 
 
