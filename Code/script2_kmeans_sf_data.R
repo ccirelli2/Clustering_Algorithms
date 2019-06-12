@@ -34,19 +34,25 @@ setwd('C:\\Users\\Chris.Cirelli\\Desktop\\Programming_Repositories\\Clustering_A
 list.files()
 sf_data <- read.csv('sf_data_06052019.csv')
 
+head(sf_data)
+
 # Limit Data - Columns
 ' Columns      Limit to Employee Count, Revenues, Type, Stage'
-sf_data_lim.1 <- select(sf_data, Annual.Revenue, Employees, Submission.Type, Stage)
+sf_data_lim.1 <- select(sf_data %>% filter(Line.of.Business == 'Private/NFP'), 
+                        Annual.Revenue, Employees, Submission.Type, Stage, Line.of.Business)
 head(sf_data_lim.1)
 
-# Limit Data - Values
-sf_data_bound <- sf_data_lim.1 %>% filter(Stage == 'Bound', Annual.Revenue != 0, 
-                                          Employees != 0)
-sf_data_declined <- sf_data_lim.1 %>% filter(Stage == 'Declined', Annual.Revenue != 0, 
-                                             Employees != 0)
+# Limit Data - Private NFP
+
+# Create Two Datasets - Bound + Declined
+sf_data_bound <-    select(sf_data_lim.1 %>% filter(Stage == 'Bound', Annual.Revenue != 0, Employees != 0), 
+                           Annual.Revenue, Employees)
+
+sf_data_declined <- select(sf_data_lim.1 %>% filter(Stage == 'Declined', Annual.Revenue != 0, Employees != 0), 
+                           Annual.Revenue, Employees) 
 
 
-
-
+boxplot(sf_data_bound$Annual.Revenue)
+plot(density(sf_data_declined$Annual.Revenue))
 
 

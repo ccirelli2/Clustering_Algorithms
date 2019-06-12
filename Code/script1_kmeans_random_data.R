@@ -7,7 +7,7 @@ rm(list=ls())
 # IMPORT LIBRARIES
 library(ggplot2)
 library(dplyr)
-setwd('C:\\Users\\Chris.Cirelli\\Desktop\\Programming_Repositories\\Clustering_Algorithms')
+setwd('C:\\Users\\Chris.Cirelli\\Desktop\\Programming_Repositories\\Clustering_Algorithms\\Code')
 source('module1_kmeans_algorithm.R')
 
 
@@ -21,6 +21,9 @@ k.means <- function(num.data.points, num.centroids, num.iters){
   
   # Step 2:  Create DataFrame with X & Y Values
   df.d = data.frame(p.x, p.y)  
+  p.1 <- ggplot(df.d, aes(x=p.x, y=p.y)) + geom_point() + ggtitle('RAW DATA')
+  print(p.1)
+  Sys.sleep(4)
   
   # Step 3:  Generate Random Data Points For K Centroids
   df.c <- f.centroids(num.centroids)
@@ -44,7 +47,7 @@ k.means <- function(num.data.points, num.centroids, num.iters){
     print(paste('MSE => ', sys.mse))
     
     # f.  Set Delay between iterations
-    Sys.sleep(2)
+    Sys.sleep(4)
     
     # g.  Recalculate Centroids
     df.c <- re.calc.centroids(df.c.assignments)
@@ -54,7 +57,7 @@ k.means <- function(num.data.points, num.centroids, num.iters){
 
 
 k.means(num.data.points = 300, 
-        num.centroids   = 4, 
+        num.centroids   = 2, 
         num.iters       = 6)
 
 
