@@ -1,0 +1,89 @@
+	Tutorial: Clustering Datasets of different data types. 
+	Topics:
+	.) Gower Distance
+	.) Jaccard Similarity
+	.) Manhattan Similarity
+	.) K-Prototype Clustering
+	.) Dissimilarity Matrix
+
+	References:
+	URL:  https://towardsdatascience.com/hierarchical-clustering-on-categorical-data-in-r-a27e578f2995
+	URL:  https://medium.com/@rumman1988/clustering-categorical-and-numerical-datatype-using-gower-distance-ab89b3aa90d9
+	Gower Package:  https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
+	Orig Paper:  http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.412.4155&rep=rep1&type=pdf
+	
+
+
+	Jaccard Index / Coefficient ---------------------------------------------------
+	REF:  https://www.statisticshowto.datasciencecentral.com/jaccard-index/
+
+	Description: The Jaccard similarity index compares members of two sets to see 
+	which members are shared and which are distant.  
+	Measure of similarity ranges from 0-100%. 
+	Calculation:  Jaccard Index = (number in both sets) / (number in either set)*100
+				  J(X,Y) = |XnY| / |XuY|
+	Steps:
+		Count the number of members which are shared between both sets
+		Count the total number of members in both sets (shared and unshared)
+		Divide the number of shared members by the number of members
+		Multiply the number by 100. 
+
+	Interpretation:  Two sets that share all members would be 100% similar. 
+
+	Example:	A 		= {0,1,2,5,6}
+				B 		= {0,2,3,4,5,7,9}
+				|AnB| 	= {0,2,5}
+				|AuB|	= {0,1,2,3,4,5,6,7,9}
+				J(X,Y)  = ((3/9)*100) = 33%
+
+
+	Manhattan Similarity -----------------------------------------------------------
+	REF:  https://dataaspirant.com/2015/04/11/five-most-popular-similarity-measures-
+	implementation-in-python/
+	REF:  https://en.wikipedia.org/wiki/Taxicab_geometry
+
+	Description:	Measures the distance between two points along axes as right angle
+			Think of it as the distance you would need to walk if you 
+			could only walk along the x-axis and y-axis at 0 and 90 degrees. 
+	Calculation:	|x1-x2| + |y1-y2|
+
+
+	Dissimilarity Matrix:  How far apart or distant points are from each other, 
+	which is the core of clustering. 
+	Gower Distance:  Is a distance measure that can be used to calculate distance between 
+	two entities whose attributes are a mix of categorical and numerical values.  
+
+	
+	Gower Coefficient -------------------------------------------------------------
+	REF: https://www.linkedin.com/pulse/simplifying-gower-coefficient-vineet-tanna/
+	
+	Description:	Approach to finding the similarity between two rows of a dataset.
+			consisting of mixed type attributes/data.  It utilizes matching
+			for categorical variables, manhattan similarity for continous
+			variables and Jaccard similarity for Binary variables. 
+	Desc 2		Relative to the maximum possible absolute (unsigned) discrepancy 
+			between the two pairs of observations, the gower discrepancy 
+			coefficient indicates the % average absolute discrepancy between 
+			all pairs of observations. When expressed as a similarity 
+			coefficient (by subtracting it from 1), it indicates the % 
+			average similarity between all pairs of observations.
+			Given a gower coefficeint of 0.9 indicates that relative to the max
+			possible discrepancy between them, the observations agree with
+			90% of each others values. 		
+
+	Application:	Used for clustering similar rows with mixed attributes. 
+			K-prototype clustering technique uses gower similarity. 
+	Formula:	Sij = sigma(Wijk * Sijk) / sigma(Wijk)
+			Sijk		denotes the contribution by the k-th variable
+			Wijk		is usually 1 or 0 depending if the comparison is valid for the k-th
+					variable. 
+	
+
+	Disimilarity Matrix ------------------------------------------------------------
+	REF:  https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R/Clustering/Dissimilarity_Matrix_Calculation
+		
+
+
+'
+
+
