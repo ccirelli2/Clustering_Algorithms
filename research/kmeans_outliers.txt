@@ -1,0 +1,11 @@
+# How to deal with outliers
+Ref:  http://www.mit.edu/~9.54/fall14/slides/Class13.pdf
+
+Outliers:	Since K-means looks for the center of a given cluster of data, 
+			it is very succeptible to outliers, which can create unintended
+			and undesireable clusters.
+
+1.	Remove the outliers. 
+2.	Perform random sampling by choosing a small subset of datapoints where
+	the chance of selecting an outlier is much smaller. 	
+
