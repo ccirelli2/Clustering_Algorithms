@@ -1,14 +1,38 @@
-######################   KMEANS CLUSTERING ALGORITHM - V2    #######################
+' DOCUMENTATION
 
+  Descr:  Kmeans clustering algoritm to find optimal centroid per
+          cluster of policies per state. 
 
-# CLEAR NAME SPACE
+'
+
+# Clearn Namespace & Plots ------------------------------
 rm(list=ls())
+dev.off(dev.list()["RStudioGD"])
 
-# IMPORT LIBRARIES
+# Set working directory ---------------------------------
+setwd("C:\\Users\\chris.cirelli\\Desktop\\repositories\\fire_resp_time\\scripts")
+list.files()
+
+# Import Modules ----------------------------------------
 library(ggplot2)
 library(dplyr)
-setwd('C:\\Users\\Chris.Cirelli\\Desktop\\Programming_Repositories\\Clustering_Algorithms\\Code')
-source('module1_kmeans_algorithm.R')
+library(odbc)
+install.packages("DBI")
+source('kmeans_functions.R')
+
+
+# Instantiate Connection to Database --------------------
+
+con <- dbConnect(odbc::odbc(),
+                 Driver = "SQL Server",
+                 Server = "yde2xj08jm.database.windows.net",
+                 Database = "SwyfftAnalyticsCentral",
+                 UID = "AnalyticsReadOnly ",
+                 PWD = rstudioapi::askForPassword("Database password"), 
+                 port = 1433)
+
+
+
 
 
 # DRIVER FUNCTION - K MEANS CLUSTER--------------------------------------------------
